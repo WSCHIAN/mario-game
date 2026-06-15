@@ -1,0 +1,18 @@
+# Sensitive
+client_secret_*.json
+
+# Dev/unused assets
+finance-brief/
+finance-brief.zip
+spiderman-backup/
+spiderman/tasm2.glb
+spiderman/character.glb
+spiderman/the_amazing_spiderman.glb
+spiderman/X Bot (1)/
+spiderman/animation/
+spiderman/files/
+spiderman/files.zip
+spiderman/batch_convert.py
+spiderman/convert_flying.py
+spiderman/merge_anims.py
+spiderman/start-server.ps1
