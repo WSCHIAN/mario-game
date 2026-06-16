@@ -1164,6 +1164,33 @@ function loadSpiderModel() {
 
   }, undefined, function(err) {
     console.warn('❌ spiderman_new.glb 載入失敗:', err.message || err);
+    console.log('↩️ 嘗試 fallback: character.glb');
+    loader.load('./character.glb', function(gltf2) {
+      const model = gltf2.scene;
+      const scale = SPIDER_H / 1.809;
+      model.scale.setScalar(scale);
+      model.rotation.y = 0;
+      model.position.y = 0;
+      while (playerGroup.children.length) playerGroup.remove(playerGroup.children[0]);
+      playerGroup.add(model);
+      model.traverse(obj => { if (obj.isMesh) { obj.castShadow = true; obj.receiveShadow = false; } });
+      mixer = new THREE.AnimationMixer(model);
+      gltfClips = {};
+      const toLoad2 = [
+        { file: './idle.glb', key: 'IDLE' }, { file: './walking.glb', key: 'WALK' },
+        { file: './running.glb', key: 'RUN' }, { file: './flying.glb', key: 'SWING' },
+        { file: './climbing-up.glb', key: 'CRAWL' }, { file: './climbing-down.glb', key: 'CRAWL_DOWN' },
+        { file: './climbing-top.glb', key: 'CRAWL_TOP' },
+      ];
+      let done2 = 0;
+      toLoad2.forEach(function(item) {
+        loader.load(item.file, function(ag) {
+          const clip = ag.animations[ag.animations.length - 1];
+          if (clip) { clip.tracks = clip.tracks.filter(t => !(t.name.match(/Hips|hip|root/i) && t.name.endsWith('.position'))); const action = mixer.clipAction(clip); action.setLoop(THREE.LoopRepeat, Infinity); gltfClips[item.key] = action; }
+          if (++done2 === toLoad2.length) { const k = gltfClips['WALK'] || gltfClips['IDLE']; if (k) { k.play(); currentClipKey = Object.keys(gltfClips).find(k2 => gltfClips[k2] === k); } }
+        }, undefined, function() { if (++done2 === toLoad2.length) { const k = gltfClips['WALK'] || gltfClips['IDLE']; if (k) { k.play(); } } });
+      });
+    }, undefined, function(e2) { console.warn('❌ character.glb 也失敗:', e2); });
   });
 
   function _startFirst() {
