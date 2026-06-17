@@ -1118,7 +1118,13 @@ function loadSpiderModel() {
     spine = chest = upperArmL = upperArmR = foreArmL = foreArmR = null;
     upperLegL = upperLegR = lowerLegL = lowerLegR = null;
     model.traverse(obj => {
-      if (obj.isMesh) { obj.castShadow = true; obj.receiveShadow = false; }
+      if (obj.isMesh) {
+        obj.castShadow = true; obj.receiveShadow = false;
+        if (obj.material) {
+          const mats = Array.isArray(obj.material) ? obj.material : [obj.material];
+          mats.forEach(m => { m.side = THREE.DoubleSide; m.needsUpdate = true; });
+        }
+      }
     });
 
     mixer = new THREE.AnimationMixer(model);
