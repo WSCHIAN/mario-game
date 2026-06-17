@@ -215,6 +215,7 @@ canvas { display:block; }
 
 <script src="./three.min.js"></script>
 <script src="./GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/DRACOLoader.js"></script>
 <script>
 "use strict";
 // ════════════════════════════════════════════════════════════
@@ -1100,6 +1101,9 @@ function loadSpiderModel() {
   ];
 
   const loader = new THREE.GLTFLoader();
+  const dracoLoader = new THREE.DRACOLoader();
+  dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
+  loader.setDRACOLoader(dracoLoader);
 
   loader.load('./tasm2.glb', function(gltf) {
     const model = gltf.scene;
