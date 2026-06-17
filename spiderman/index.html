@@ -215,7 +215,6 @@ canvas { display:block; }
 
 <script src="./three.min.js"></script>
 <script src="./GLTFLoader.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/DRACOLoader.js"></script>
 <script>
 "use strict";
 // ════════════════════════════════════════════════════════════
@@ -1101,11 +1100,8 @@ function loadSpiderModel() {
   ];
 
   const loader = new THREE.GLTFLoader();
-  const dracoLoader = new THREE.DRACOLoader();
-  dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
-  loader.setDRACOLoader(dracoLoader);
 
-  loader.load('./tasm2.glb', function(gltf) {
+  loader.load('./character.glb', function(gltf) {
     const model = gltf.scene;
 
     const MODEL_NATURAL_HEIGHT = 1.809;
@@ -1113,7 +1109,7 @@ function loadSpiderModel() {
     model.scale.setScalar(scale);
     model.rotation.y = 0;
     model.position.y = 0;
-    console.log('📐 tasm2.glb 載入，scale=' + scale.toFixed(4));
+    console.log('📐 character.glb 載入，scale=' + scale.toFixed(4));
 
     while (playerGroup.children.length) playerGroup.remove(playerGroup.children[0]);
     playerGroup.add(model);
@@ -1167,9 +1163,9 @@ function loadSpiderModel() {
     });
 
   }, undefined, function(err) {
-    console.warn('❌ tasm2.glb 載入失敗:', err.message || err);
-    console.log('↩️ 嘗試 fallback: character.glb');
-    loader.load('./character.glb', function(gltf2) {
+    console.warn('❌ character.glb 載入失敗:', err.message || err);
+    console.log('↩️ 嘗試 fallback: spiderman_new.glb');
+    loader.load('./spiderman_new.glb', function(gltf2) {
       const model = gltf2.scene;
       const scale = SPIDER_H / 1.809;
       model.scale.setScalar(scale);
